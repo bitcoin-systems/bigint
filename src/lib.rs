@@ -33,8 +33,21 @@ impl BigInt {
         } 
         Self {
             neg: v < 0, digits
-        }
+        }.normalize()
     }
+
+    fn normalize(mut self) -> Self {
+        while self.digits.last().map_or(false, |&d| d == 0) { 
+            self.digits.pop();
+        }
+
+        if self.digits.is_empty(){
+            self.neg = false; 
+        }
+
+        self
+    }
+
 }
 
 pub fn add(left: u64, right: u64) -> u64 {
