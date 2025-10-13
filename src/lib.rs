@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 const BASE: u32 = 1_000_000_000;
 
 pub struct BigInt {
@@ -48,6 +50,42 @@ impl BigInt {
         self
     }
 
+    pub fn is_zero(&self) -> bool {
+        self.digits.is_empty()
+    }
+
+    /// converts bigint to string instance
+    /// # Example
+    /// ```rust
+    /// fn to_string() {
+    ///  let v = BigInt::from_i64(1002323809800980);
+    ///  assert_eq!(v.to_string(), "1002323809800980".to_string());
+    /// }
+    /// ```
+    /// # Returns
+    /// Instance of string in term of bigint
+    pub fn to_string(&self) -> String {
+        if self.is_zero() {
+            return "0".to_string();
+        }
+        let mut s = String::new();
+        if self.neg {
+            s.push('-');
+        }
+
+        let mut it = self.digits.iter().rev();
+
+        let first = *it.next().unwrap();
+        s.push_str(&first.to_string());
+
+        for &d in it {
+            let chunk = format!("{:09}", d);
+            s.push_str(&chunk);
+        }
+
+        s
+    }
+
 }
 
 pub fn add(left: u64, right: u64) -> u64 {
@@ -71,5 +109,12 @@ mod tests {
        for (i, &n) in [809800980, 1002323].iter().enumerate() {
         assert_eq!(n, v.digits[i]);
        }
+    }
+
+    #[test]
+    fn to_string() {
+        let v = BigInt::from_i64(1002323809800980);
+
+        assert_eq!(v.to_string(), "1002323809800980".to_string());
     }
 }
