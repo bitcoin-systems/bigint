@@ -55,6 +55,7 @@ impl BigInt {
     /// converts bigint to string instance
     /// # Example
     /// ```rust
+    /// use bigint::BigInt;
     /// fn to_string() {
     ///  let v = BigInt::from_i64(1002323809800980);
     ///  assert_eq!(v.to_string(), "1002323809800980".to_string());
