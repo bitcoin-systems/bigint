@@ -7,6 +7,12 @@ pub struct BigInt {
     digits: Vec<u32>, // little endian; digits[0] is least significat limb
 }
 
+impl Default for BigInt {
+    fn default() -> Self {
+        BigInt::zero()
+    }
+}
+
 impl BigInt {
     pub fn zero() -> Self {
         Self {
