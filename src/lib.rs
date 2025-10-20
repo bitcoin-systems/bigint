@@ -2,6 +2,7 @@ use std::fmt::format;
 
 const BASE: u32 = 1_000_000_000;
 
+#[derive(Clone, Debug)]
 pub struct BigInt {
     neg: bool,
     digits: Vec<u32>, // little endian; digits[0] is least significat limb
@@ -40,6 +41,13 @@ impl BigInt {
             x /= BASE as u64;
         }
         Self { neg: v < 0, digits }.normalize()
+    }
+
+    // Returns absolute value of bigint
+    pub fn abs(&self) -> Self {
+        let mut val = self.clone();
+        val.neg = false;
+        val
     }
 
     fn normalize(mut self) -> Self {
@@ -120,5 +128,13 @@ mod tests {
         let v = BigInt::from_i64(1002323809800980);
 
         assert_eq!(v.to_string(), "1002323809800980".to_string());
+    }
+
+    #[test]
+    fn test_abs() {
+        let expected = "1002323809800980".to_string();
+        let result = BigInt::from_i64(-1002323809800980).abs().to_string();
+
+        assert_eq!(result, expected);
     }
 }
