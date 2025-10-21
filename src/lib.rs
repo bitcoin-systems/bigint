@@ -66,6 +66,10 @@ impl BigInt {
         self.digits.is_empty()
     }
 
+    pub fn is_negative(&self) -> bool {
+        self.neg && !self.is_zero()
+    }
+
     /// converts bigint to string instance
     /// # Example
     /// ```rust
@@ -136,5 +140,11 @@ mod tests {
         let result = BigInt::from_i64(-1002323809800980).abs().to_string();
 
         assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_is_negative() {
+        let result = BigInt::from_i64(-1002323809800980).is_negative();
+        assert_eq!(result, true);
     }
 }
