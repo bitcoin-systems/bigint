@@ -43,6 +43,21 @@ impl BigInt {
         Self { neg: v < 0, digits }.normalize()
     }
 
+    pub fn from_i128(v: i128) -> Self {
+        if v == 0 {
+            return Self::zero();
+        }
+
+        let mut x = v.unsigned_abs();
+
+        let mut digits = Vec::new();
+        while x > 0 {
+            digits.push((x % BASE as u128) as u32);
+            x /= BASE as u128;
+        }
+        Self { neg: v < 0, digits }.normalize()
+    }
+
     // Returns absolute value of bigint
     pub fn abs(&self) -> Self {
         let mut val = self.clone();
