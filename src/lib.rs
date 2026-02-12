@@ -1,4 +1,4 @@
-use std::fmt::format;
+use std::{cmp::Ordering, fmt::format};
 
 const BASE: u32 = 1_000_000_000;
 
@@ -117,6 +117,21 @@ impl BigInt {
 
         s
     }
+
+    pub fn cmp_abs(&self, other: &Self) -> Ordering {
+        match self.digits.len().cmp(&other.digits.len()) {
+            Ordering::Equal => {
+                for (a, b) in self.digits.iter().rev().zip(other.digits.iter().rev()) {
+                    let ord = a.cmp(b);
+                    if ord != Ordering::Equal {
+                        return ord;
+                    }
+                }
+                Ordering::Equal
+            }
+            ord => ord,
+        }
+    }
 }
 
 pub fn add(left: u64, right: u64) -> u64 {
@@ -161,5 +176,12 @@ mod tests {
     fn test_is_negative() {
         let result = BigInt::from_i64(-1002323809800980).is_negative();
         assert_eq!(result, true);
+    }
+
+    #[test]
+    fn test_cmp_abs() {
+        let a = BigInt::from_i64(1002323809800980);
+        let b = BigInt::from_i64(1002323809800980);
+        assert_eq!(a.cmp_abs(&b), Ordering::Equal);
     }
 }
